@@ -2,10 +2,15 @@
 #include <iostream>
 #include<thread>
 #include<vector>
+#define NUMOFFSET 100
+#define COLNAME 200
+
+
 DatabaseManager::DatabaseManager(const std::string& host, const std::string& user, const std::string& password, const std::string& database) {
     driver = sql::mysql::get_mysql_driver_instance();
     con = driver->connect(host, user, password);
     con->setSchema(database);
+    pstmt = con->prepareStatement("SELECT * FROM Employees WHERE gender = ? AND fullName LIKE ? ORDER BY fullName");
 }
 
 DatabaseManager::~DatabaseManager() {
@@ -37,7 +42,7 @@ sql::ResultSet* DatabaseManager::getAllEmployees() {
 }
 
 sql::ResultSet* DatabaseManager::getFilteredEmployees(const std::string& gender, const std::string& lastNameStart) {
-    sql::PreparedStatement* pstmt = con->prepareStatement("SELECT * FROM Employees WHERE gender = ? AND fullName LIKE ? ORDER BY fullName");
+    
     pstmt->setString(1, gender);
     pstmt->setString(2, lastNameStart + "%");
     return pstmt->executeQuery();

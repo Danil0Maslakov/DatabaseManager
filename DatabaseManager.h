@@ -19,6 +19,8 @@ public: DatabaseManager(const std::string& host, const std::string& user, const 
 	sql::ResultSet* getFilteredEmployees(const std::string& gender, const std::string& lastNameStart); 
 private: 
 	sql::mysql::MySQL_Driver* driver; 
-	sql::Connection* con; };
+	sql::Connection* con; 
+	sql::PreparedStatement* pstmt;
+};
 
 #endif
